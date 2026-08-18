@@ -1308,8 +1308,8 @@
   <h1>Establish Your<br><span class="gradient-text">Salah &amp; Worship</span></h1>
   <p>Track your daily prayers, adhkar, and Quran recitation. Strengthen your relationship with Allah ﷻ through consistency.</p>
   <div class="hero-actions">
-    <button class="btn-primary" onclick="scrollTo('#prayer-times')">Start Tracking</button>
-    <button class="btn-secondary" onclick="scrollTo('#qibla')">Find Qibla</button>
+    <button class="btn-primary" onclick="scrollToSelector('#prayer-times')">Start Tracking</button>
+    <button class="btn-secondary" onclick="scrollToSelector('#qibla')">Find Qibla</button>
   </div>
 </section>
 
@@ -2140,8 +2140,9 @@ function haversine(lat1, lon1, lat2, lon2) {
 }
 
 // ===== UTILITIES =====
-function scrollTo(sel) {
-  document.querySelector(sel).scrollIntoView({ behavior: 'smooth' });
+function scrollToSelector(sel) {
+  const el = document.querySelector(sel);
+  if (el) el.scrollIntoView({ behavior: 'smooth' });
 }
 
 function showToast(msg, type = 'info') {
