@@ -18,7 +18,7 @@ A beautiful Apple-style website for Muslims to track their **salah (prayer)** an
 
 ## Live Demo
 
-🔗 [taqwa-prayer.netlify.app](https://taqwa-prayer.netlify.app)
+🔗 https://jjforjhon.github.io/taqwa-prayer/
 
 ## Tech
 
