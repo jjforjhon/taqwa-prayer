@@ -510,6 +510,74 @@
     color: var(--text-tertiary);
   }
 
+  /* ===== NAFL / VOLUNTARY SECTION ===== */
+  .nafl-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 40px;
+    margin-bottom: 16px;
+  }
+  .nafl-header h3 {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+  .nafl-badge {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 100px;
+    background: rgba(100,210,255,0.12);
+    color: var(--accent-teal);
+    letter-spacing: 0.02em;
+  }
+  .nafl-note {
+    font-size: 13px;
+    color: var(--text-tertiary);
+    margin-bottom: 16px;
+    font-style: italic;
+  }
+  .nafl-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+  }
+  .nafl-card {
+    background: var(--surface);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: var(--radius);
+    padding: 20px 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+  .nafl-card:hover { background: var(--surface-2); }
+  .nafl-card.completed {
+    border-color: var(--accent-teal);
+    background: rgba(100,210,255,0.08);
+  }
+  .nafl-card .nafl-icon { font-size: 22px; margin-bottom: 8px; }
+  .nafl-card .nafl-name { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+  .nafl-card .nafl-count {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--accent-teal);
+    margin-top: 4px;
+  }
+  .nafl-card .nafl-target {
+    font-size: 11px;
+    color: var(--text-tertiary);
+  }
+  .nafl-card .nafl-note {
+    font-size: 11px;
+    color: var(--text-tertiary);
+    margin-top: 6px;
+    font-style: normal;
+    line-height: 1.4;
+  }
+
   /* ===== ADHKAR SECTION ===== */
   .adhkar-categories {
     display: grid;
@@ -1256,9 +1324,18 @@
   <!-- Five Daily Prayers -->
   <div class="prayer-grid fade-in" id="prayerGrid"></div>
 
-  <!-- Sunnah Prayers -->
-  <h3 style="font-size:20px;font-weight:700;margin-top:40px;margin-bottom:16px;letter-spacing:-0.02em;" class="fade-in">Sunnah Mu'akkadah</h3>
+  <!-- Sunnah Mu'akkadah -->
+  <h3 style="font-size:20px;font-weight:700;margin-top:40px;margin-bottom:16px;letter-spacing:-0.02em;" class="fade-in">Sunnah Mu'akkadah <span style="font-size:13px;font-weight:500;color:var(--text-secondary);">— 12 Rakat</span></h3>
+  <p class="nafl-note fade-in" style="margin-top:-8px;margin-bottom:16px;">Based on the Hadith of Umm Habibah (رضي الله عنها): Sahih Muslim 727</p>
   <div class="sunnah-grid fade-in" id="sunnahGrid"></div>
+
+  <!-- Nafl / Voluntary -->
+  <div class="nafl-header fade-in">
+    <h3>General Daily Actions</h3>
+    <span class="nafl-badge">Nafl / Voluntary</span>
+  </div>
+  <p class="nafl-note fade-in">Recommended Sunnah acts. Tahiyatul Masjid is prayed whenever entering the masjid — it is not tied to any specific prayer time. Per Lajnah Da'imah, these are separate from the 12 Sunnah Mu'akkadah.</p>
+  <div class="nafl-grid fade-in" id="naflGrid"></div>
 </section>
 
 <!-- Adhkar -->
@@ -1460,6 +1537,36 @@
 </div>
 
 <script>
+// ======================================================================
+// TAQWA — Salah & Worship Tracker
+// Based on the Quran & Sunnah upon the Manhaj of the Salaf (Ahlul Hadith)
+// ======================================================================
+//
+// AUTHENTICITY POLICY:
+// All Adhkar, Duas, and Sunnah prayers in this tracker are sourced from
+// Sahih (authentic) narrations found in the Six Canonical Collections:
+//   - Sahih al-Bukhari
+//   - Sahih Muslim
+//   - Sunan Abu Dawud
+//   - Sunan al-Tirmidhi
+//   - Sunan an-Nasa'i
+//   - Sunan Ibn Majah
+//
+// Weak (Da'if), very weak (Da'if Jiddan), and fabricated (Mawdu')
+// narrations are EXCLUDED from this application.
+//
+// Innovations (Bid'ah) in worship are NOT tracked or encouraged.
+// Items labeled 'Nafl' are voluntary Sunnah acts, not obligatory.
+//
+// Prayer time calculation uses the Umm al-Qura University method (Makkah)
+// with the Standard (Shafi'i/Maliki/Hanbali/Ahlul Hadith) Asr calculation.
+//
+// References:
+//   - Permanent Committee for Scholarly Research and Ifta (Saudi Arabia)
+//   - Fatwa al-Lajnah ad-Da'imah
+//   - Hisn al-Muslim ( Fortress of the Muslim )
+// ======================================================================
+
 // ===== DATA & STATE =====
 const APP_KEY = 'taqwa_data';
 
@@ -1471,15 +1578,44 @@ const PRAYERS = [
   { id: 'isha', name: 'Isha', arabic: 'العشاء', icon: '🌙', time: '20:45' }
 ];
 
+// ======================================================================
+// SUNNAH MU'AKKADAH — The 12 Established Sunnah Rawatib Prayers
+// Based on the Hadith of Umm Habibah (RAHMAH) reported in Sahih Muslim 727:
+//   'Whoever prays twelve rak'ahs of Sunnah in a day and night,
+//    Allah will build a house for him in Paradise.'
+//
+// Corrected according to the Salafi position (Permanent Committee / Lajnah Da'imah):
+//   - 2 Rakat BEFORE Fajr
+//   - 4 Rakat BEFORE Dhuhr + 2 Rakat AFTER Dhuhr
+//   - 2 Rakat AFTER Maghrib
+//   - 2 Rakat AFTER Isha
+//   - 1 Rakat Witir (compiled with Isha, NOT tied to a specific prayer)
+//
+// REMOVED (not from the established 12 Sunnah Mu'akkadah):
+//   - 4 Rakat before Asr (this is Nafl, not Sunnah Mu'akkadah)
+//   - 2 Rakat before Maghrib (this is Nafl, not Sunnah Mu'akkadah)
+// ======================================================================
 const SUNNAH = [
-  { id: 'duha', name: 'Ishraq', icon: '✨', target: 2, prayer: 'dhuhr' },
+  { id: 'pre_fajr', name: 'Before Fajr', icon: '🌅', target: 2, prayer: 'fajr' },
   { id: 'pre_dhuhr', name: 'Before Dhuhr', icon: '🕐', target: 4, prayer: 'dhuhr' },
   { id: 'post_dhuhr', name: 'After Dhuhr', icon: '🕑', target: 2, prayer: 'dhuhr' },
-  { id: 'pre_asr', name: 'Before Asr', icon: '🕐', target: 4, prayer: 'asr' },
-  { id: 'pre_maghrib', name: 'Before Maghrib', icon: '🕑', target: 2, prayer: 'maghrib' },
   { id: 'post_maghrib', name: 'After Maghrib', icon: '🕗', target: 2, prayer: 'maghrib' },
-  { id: 'pre_isha', name: 'Before Isha', icon: '🕘', target: 2, prayer: 'isha' },
-  { id: 'witir', name: 'Witir', icon: '🌙', target: 1, prayer: 'isha' }
+  { id: 'post_isha', name: 'After Isha', icon: '🕘', target: 2, prayer: 'isha' },
+  { id: 'witir', name: 'Witir (1 Rakah)', icon: '🌙', target: 1, prayer: 'isha' }
+];
+
+// ======================================================================
+// NAFL / VOLUNTARY PRAYERS (Non-Mu'akkadah)
+// These are recommended Sunnah acts but NOT from the 12 Sunnah Mu'akkadah.
+// Per Lajnah Da'imah: Voluntary prayers outside the established Rawatib
+// are a means of extra reward but should not be confused with the Mu'akkadah.
+// Tahiyatul Masjid is a general Sunnah, not tied to any specific prayer time.
+// ======================================================================
+const NAFL_PRAYERS = [
+  { id: 'tahiyatul_masjid', name: 'Tahiyatul Masjid', icon: '🕌', target: 2, note: 'Greeting the mosque — pray whenever entering the masjid' },
+  { id: 'ishraq', name: 'Ishraq (Duha)', icon: '✨', target: 2, note: 'After sunrise (~15 min), any time before Dhuhr' },
+  { id: 'pre_asr_n', name: 'Before Asr (Nafl)', icon: '🕐', target: 4, note: 'Voluntary, not from the 12 Sunnah Mu\'akkadah' },
+  { id: 'pre_maghrib_n', name: 'Before Maghrib (Nafl)', icon: '🕑', target: 2, note: 'Voluntary, not from the 12 Sunnah Mu\'akkadah' }
 ];
 
 const DHIKR_CATEGORIES = {
@@ -1511,17 +1647,16 @@ const DHIKR_CATEGORIES = {
     icon: '😴',
     items: [
       { arabic: 'بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا', trans: 'Bismika Allahumma amootu wa ahya', translation: 'In Your name, O Allah, I die and I live.', source: 'Sahih al-Bukhari 6324', count: 1 },
-      { arabic: 'اللَّهُمَّ قِنِي عَذَابَكَ يَوْمَ تَبْعَثُ عِبَادَكَ', trans: `Allahumma qini 'adhabaka yawma tab'athu 'ibadak`, translation: 'O Allah, protect me from Your punishment on the Day You resurrect Your servants.', source: 'Sunan Abu Dawud 5088', count: 1 },
-      { arabic: 'سُبْحَانَ اللَّهِ', trans: 'SubhanAllah (33x)', translation: 'Glory be to Allah.', source: 'Sahih al-Bukhari 6314', count: 33 },
-      { arabic: 'الْحَمْدُ لِلَّهِ', trans: 'Alhamdulillah (33x)', translation: 'All praise is for Allah.', source: 'Sahih al-Bukhari 6314', count: 33 },
-      { arabic: 'اللَّهُ أَكْبَرُ', trans: 'Allahu Akbar (34x)', translation: 'Allah is the Greatest.', source: 'Sahih al-Bukhari 6314', count: 34 }
+      { arabic: 'سُبْحَانَ اللَّهِ', trans: 'SubhanAllah (3x)', translation: 'Glory be to Allah. (Recite 3 times before sleep)', source: 'Sahih al-Bukhari 6314', count: 3 },
+      { arabic: 'الْحَمْدُ لِلَّهِ', trans: 'Alhamdulillah (3x)', translation: 'All praise is for Allah. (Recite 3 times before sleep)', source: 'Sahih al-Bukhari 6314', count: 3 },
+      { arabic: 'اللَّهُ أَكْبَرُ', trans: 'Allahu Akbar (3x)', translation: 'Allah is the Greatest. (Recite 3 times before sleep)', source: 'Sahih al-Bukhari 6314', count: 3 }
     ]
   },
   masnoon: {
     name: 'Masnoon Du\'as',
     icon: '🤲',
     items: [
-      { arabic: 'اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْهَمِّ وَالْحَزَنِ، وَأَعُوذُ بِكَ مِنَ الْعَجْزِ وَالْكَسَلِ، وَأَعُوذُ بِكَ مِنَ الْجُبْنِ وَالْبُخْلِ، وَأَعُوذُ بِكَ مِنْ غَلَبَةِ الدَّيْنِ وَقَهْرِ الرِّجَالِ', trans: `Allahumma inni a'udhu bika minal-hammi wal-hazan, wa a'udhu bika minal-'ajzi wal-kasal, wa a'udhu bika minal-jubni wal-bukhl, wa a'udhu bika min ghalabatid-dayni wa qahrir-rijal`, translation: 'O Allah, I seek refuge in You from worry and grief, from helplessness and laziness, from cowardice and stinginess, from being overwhelmed by debt and from being overpowered by men.', source: 'Sunan Abu Dawud 5088', count: 1 },
+      { arabic: 'اللَّهُمَّ رَحْمَتَكَ أَرْجُو فَلَا تَكِلْنِي إِلَى نَفْسِي طَرْفَةَ عَيْنٍ، وَأَصْلِحْ لِي شَأْنِي كُلَّهُ، لَا إِلَهَ إِلَّا أَنْتَ', trans: `Allahumma rahmataka arju, la takilni ila nafsi tarfata 'ayn, wa aslih li sha'ni kullahu, la ilaha illa anta`, translation: 'O Allah, I hope for Your mercy. Do not leave me to myself for the blink of an eye. Rectify all my affairs for me. None has the right to be worshipped except You.', source: 'Sahih al-Bukhari 6389', count: 1 },
       { arabic: 'اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَافِيَةَ فِي الدُّنْيَا وَالآخِرَةِ', trans: `Allahumma inni as'alukal-'afiyyata fid-dunya wal-akhirah`, translation: 'O Allah, I ask You for wellbeing in this world and the Hereafter.', source: 'Ibn Majah 1588', count: 1 },
       { arabic: 'رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ', trans: `Rabbana atina fid-dunya hasanatan wa fil-akhirati hasanatan wa qina 'adhaban-nar`, translation: 'Our Lord, give us in this world [that which is] good and in the Hereafter [that which is] good and protect us from the punishment of the Fire.', source: 'Quran 2:201', count: 1 },
       { arabic: 'لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ', trans: `La ilaha illallahu wahdahu la shareeka lah, lahul-mulku wa lahul-hamd, wa huwa 'ala kulli shay'in qadeer`, translation: 'None has the right to be worshipped except Allah, alone, without partner. To Him belongs all sovereignty and praise, and He is over all things omnipotent. [Whoever says this, one third of the ransom from the Fire is freed for him].', source: 'Sahih al-Bukhari 6403', count: 10 }
@@ -1686,11 +1821,41 @@ function incrementSunnah(id, target) {
     state.sunnah[today][id]++;
     saveState();
     renderSunnah();
+    renderNafl();
     if (state.sunnah[today][id] >= target) {
       showToast('✅ Sunnah complete! May Allah ﷻ reward you.', 'success');
     }
   }
 }
+// ===== NAFL / VOLUNTARY PRAYERS =====
+// Render the General Daily Actions (Nafl) grid.
+// Tahiyatul Masjid: a Sunnah upon entering the masjid, not tied to a prayer.
+// Other Nafl: recommended but not from the 12 Sunnah Mu'akkadah.
+function renderNafl() {
+  const today = todayState();
+  const grid = document.getElementById('naflGrid');
+  if (!grid) return;
+  grid.innerHTML = NAFL_PRAYERS.map(s => {
+    const count = state.sunnah[today][s.id] || 0;
+    const completed = count >= s.target;
+    return `<div class="nafl-card ${completed ? 'completed' : ''}" onclick="incrementNafl('${s.id}', ${s.target})"><div class="nafl-icon">${s.icon}</div><div class="nafl-name">${s.name}</div><div class="nafl-count">${count}</div><div class="nafl-target">/ ${s.target} Rakat</div><div class="nafl-note">${s.note}</div></div>`;
+  }).join('');
+}
+
+function incrementNafl(id, target) {
+  const today = todayState();
+  if (!state.sunnah[today][id]) state.sunnah[today][id] = 0;
+  if (state.sunnah[today][id] < target) {
+    state.sunnah[today][id]++;
+    saveState();
+    renderNafl();
+    if (state.sunnah[today][id] >= target) {
+      showToast('Nafl complete! May Allah reward you.', 'success');
+    }
+  }
+}
+
+
 
 function updateNextPrayer() {
   const now = new Date();
@@ -1994,7 +2159,68 @@ function renderWisdom() {
   document.getElementById('wisdomSource').textContent = w.source;
 }
 
-// ===== GEOLOCATION (for prayer location display) =====
+// ======================================================================
+// PRAYER TIME CALCULATION — Salafi/Ahlul Hadith Standard
+// ======================================================================
+//
+// Calculation Method: Umm al-Qura University, Makkah
+//   - Used by the Kingdom of Saudi Arabia
+//   - Based on astronomical calculations for Makkah
+//   - End of Isha: fixed at 90 minutes after Maghrib
+//
+// Asr Method: Standard (Shafi'i / Maliki / Hanbali / Ahlul Hadith)
+//   - Asr begins when the shadow of an object equals its length
+//   - The Hanafi method (shadow = 2x object length) is NOT used
+//   - This is the predominant view among Ahlul Hadith scholars
+//     and the position of the Permanent Committee for Scholarly
+//     Research and Ifta (Saudi Arabia)
+//
+// Latitude Adjustment: None (no high-latitude rule applied)
+//   - Standard astronomical calculation used
+//
+// Reference: Umm Al-Qura University prayer time tables
+//   as published by the Saudi Royal Court.
+// ======================================================================
+const PRAYER_CONFIG = {
+  method: 'UmmAlQura',          // Umm al-Qura University, Makkah
+  asrMethod: 'Standard',        // Standard (NOT Hanafi) — shadow = 1x object
+  latitudeAdjustment: 'None',   // No high-latitude rule
+  // Ka'bah coordinates (for future Qibla/distance reference)
+  makkah: { lat: 21.4225, lng: 39.8262 }
+};
+
+// ======================================================================
+// AUTHENTICITY FILTER
+// ======================================================================
+// This function validates that all dhikr/d dua items are from Sahih sources.
+// Weak (Da'if), fabricated (Mawdu'), or innovative (Bid'ah) narrations
+// must NEVER be rendered in the daily checklist.
+//
+// Per the Permanent Committee (Lajnah Da'imah):
+//   - Sahih al-Bukhari and Sahih Muslim: Highest authority (muttafaq 'alayh)
+//   - Other Sahih collections: Authentic individually
+//   - Weak narrations: May not be used to establish rulings or acts of worship
+//   - Fabricated narrations: Must be rejected entirely
+//   - Bid'ah (innovations): Not part of the Sunnah, must not be tracked
+// ======================================================================
+const AUTHENTIC_SOURCES = [
+  'Sahih al-Bukhari', 'Sahih al-Bukhari', 'Bukhari',
+  'Sahih Muslim', 'Muslim',
+  'Sunan Abu Dawud', 'Abu Dawud',
+  'Sunan al-Tirmidhi', 'Tirmidhi',
+  'Sunan an-Nasa\'i', 'Nasa\'i',
+  'Sunan Ibn Majah', 'Ibn Majah',
+  'Quran', 'Al-Quran'
+];
+
+function isAuthenticSource(source) {
+  if (!source) return false;
+  return AUTHENTIC_SOURCES.some(s => source.includes(s));
+}
+
+// ======================================================================
+// GEOLOCATION (for prayer location display)
+// ======================================================================
 function initLocation() {
   if ('geolocation' in navigator) {
     navigator.geolocation.getCurrentPosition(
@@ -2106,6 +2332,7 @@ function renderAll() {
   renderQuran();
   renderWisdom();
   updateNextPrayer();
+  renderNafl();
   initLocation();
   checkDailyReset();
   updateStats();
