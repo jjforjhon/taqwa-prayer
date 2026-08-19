@@ -1265,6 +1265,293 @@
   .btn-danger:hover {
     background: rgba(255,69,58,0.1);
   }
+
+  /* ===== ASK SCHOLARS CHAT ===== */
+  #scholars {
+    background: linear-gradient(180deg, rgba(191,90,242,0.05) 0%, transparent 100%);
+  }
+
+  .chat-container {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(255,255,255,0.06);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 600px;
+  }
+
+  .chat-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+
+  .chat-header-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: var(--gradient-1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+
+  .chat-header-text h4 {
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  .chat-header-text span {
+    font-size: 12px;
+    color: var(--text-tertiary);
+  }
+
+  .chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    scroll-behavior: smooth;
+  }
+
+  .chat-msg {
+    max-width: 85%;
+    padding: 14px 18px;
+    border-radius: 18px;
+    font-size: 14px;
+    line-height: 1.6;
+    word-wrap: break-word;
+    animation: fadeInUp 0.3s ease;
+  }
+
+  .chat-msg.user {
+    align-self: flex-end;
+    background: var(--accent);
+    color: #fff;
+    border-bottom-right-radius: 6px;
+  }
+
+  .chat-msg.scholar {
+    align-self: flex-start;
+    background: var(--surface-2);
+    color: var(--text);
+    border-bottom-left-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .chat-msg.scholar .scholar-cite {
+    display: block;
+    font-size: 11px;
+    color: var(--accent-purple);
+    font-weight: 600;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .chat-msg.error {
+    align-self: center;
+    background: rgba(255,69,58,0.1);
+    border: 1px solid rgba(255,69,58,0.2);
+    color: var(--accent-red);
+    text-align: center;
+    max-width: 100%;
+    border-radius: 12px;
+  }
+
+  .chat-msg.offline {
+    align-self: center;
+    background: rgba(255,159,10,0.1);
+    border: 1px solid rgba(255,159,10,0.2);
+    color: var(--accent-orange);
+    text-align: center;
+    max-width: 100%;
+    border-radius: 12px;
+  }
+
+  .chat-typing {
+    align-self: flex-start;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 14px 18px;
+    background: var(--surface-2);
+    border-radius: 18px;
+    border-bottom-left-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .chat-typing-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--text-tertiary);
+    animation: typingBounce 1.4s infinite ease-in-out;
+  }
+
+  .chat-typing-dot:nth-child(2) { animation-delay: 0.2s; }
+  .chat-typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+  @keyframes typingBounce {
+    0%, 80%, 100% { transform: scale(0.7); opacity: 0.4; }
+    40% { transform: scale(1); opacity: 1; }
+  }
+
+  .chat-welcome {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: var(--text-tertiary);
+    padding: 40px;
+  }
+
+  .chat-welcome-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+  }
+
+  .chat-welcome h3 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+
+  .chat-welcome p {
+    font-size: 14px;
+    line-height: 1.6;
+    max-width: 400px;
+  }
+
+  .chat-welcome-scholars {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 20px;
+  }
+
+  .chat-welcome-scholar {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 100px;
+    background: var(--surface-2);
+    color: var(--text-secondary);
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .chat-input-area {
+    padding: 16px 24px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    gap: 12px;
+    align-items: flex-end;
+    flex-shrink: 0;
+    background: var(--surface);
+  }
+
+  .chat-input {
+    flex: 1;
+    padding: 12px 16px;
+    background: var(--surface-2);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 24px;
+    color: var(--text);
+    font-size: 14px;
+    font-family: inherit;
+    resize: none;
+    max-height: 120px;
+    outline: none;
+    transition: border-color 0.2s;
+    line-height: 1.5;
+  }
+
+  .chat-input:focus {
+    border-color: var(--accent-purple);
+  }
+
+  .chat-input::placeholder {
+    color: var(--text-tertiary);
+  }
+
+  .chat-send {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--accent-purple);
+    border: none;
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+
+  .chat-send:hover {
+    transform: scale(1.08);
+    background: #a94ae0;
+  }
+
+  .chat-send:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .chat-suggestion-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 0 24px 12px;
+  }
+
+  .chat-chip {
+    padding: 6px 14px;
+    background: var(--surface-2);
+    border: 1px solid rgba(191,90,242,0.2);
+    border-radius: 100px;
+    color: var(--accent-purple);
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .chat-chip:hover {
+    background: rgba(191,90,242,0.1);
+    border-color: var(--accent-purple);
+  }
+
+  .chat-footer-note {
+    text-align: center;
+    font-size: 11px;
+    color: var(--text-tertiary);
+    padding: 0 24px 8px;
+  }
+
+  @media (max-width: 768px) {
+    .chat-container { height: 500px; }
+    .chat-msg { max-width: 92%; }
+    .chat-header { padding: 16px 20px; }
+    .chat-messages { padding: 16px 20px; }
+    .chat-input-area { padding: 12px 16px; }
+  }
 </style>
 </head>
 <body>
@@ -1281,7 +1568,7 @@
       <li><a href="#adhkar">Adhkar</a></li>
       <li><a href="#quran">Quran</a></li>
       <li><a href="#stats">Stats</a></li>
-
+      <li><a href="#scholars">Ask Scholars</a></li>
     </ul>
     <div class="nav-right">
       <button class="hamburger" id="hamburger" onclick="toggleMobileNav()">☰</button>
@@ -1497,6 +1784,59 @@
 
 
 
+<!-- Ask Scholars Chat -->
+<section id="scholars">
+  <div class="fade-in">
+    <div class="section-label">Knowledge</div>
+    <h2 class="section-title">Ask the Scholars</h2>
+    <p class="section-desc">Seek knowledge from the authentic Salaf. Answers are derived from the fatawa and writings of recognized scholars of the Athari manhaj.</p>
+  </div>
+
+  <div class="chat-container fade-in">
+    <div class="chat-header">
+      <div class="chat-header-icon">📚</div>
+      <div class="chat-header-text">
+        <h4>Scholarly Q&amp;A</h4>
+        <span>Salafi / Athari / Ahlul Hadith</span>
+      </div>
+    </div>
+
+    <div class="chat-messages" id="chatMessages">
+      <div class="chat-welcome" id="chatWelcome">
+        <div class="chat-welcome-icon">🕌</div>
+        <h3>Ask a Question</h3>
+        <p>Your question will be answered based on the authentic texts and fatawa of the Salafi scholars.</p>
+        <div class="chat-welcome-scholars">
+          <span class="chat-welcome-scholar">Ibn Taymiyyah</span>
+          <span class="chat-welcome-scholar">Ibn al-Qayyim</span>
+          <span class="chat-welcome-scholar">Ibn Hajar</span>
+          <span class="chat-welcome-scholar">Sh. Bin Baz</span>
+          <span class="chat-welcome-scholar">Sh. Uthaymeen</span>
+          <span class="chat-welcome-scholar">Sh. al-Fawzan</span>
+          <span class="chat-welcome-scholar">Sh. al-Badr</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="chat-suggestion-chips" id="chatSuggestions">
+      <button class="chat-chip" onclick="sendSuggestion('What is the definition of Tawheed?')">What is Tawheed?</button>
+      <button class="chat-chip" onclick="sendSuggestion('What are the pillars of Imaan?')">Pillars of Imaan</button>
+      <button class="chat-chip" onclick="sendSuggestion('Explain the importance of following the Salaf.')">Following the Salaf</button>
+      <button class="chat-chip" onclick="sendSuggestion('What is the ruling on celebrating the Prophet's birthday?')">Mawlid ruling</button>
+      <button class="chat-chip" onclick="sendSuggestion('What is Ihsan in Islam?')">What is Ihsan?</button>
+    </div>
+
+    <div class="chat-footer-note">
+      Internet connection required. Answers are AI-generated from scholarly texts — verify important matters with a local scholar.
+    </div>
+
+    <div class="chat-input-area">
+      <textarea class="chat-input" id="chatInput" placeholder="Ask a question about Aqeedah, Tawheed, Salah, Hadith..." rows="1" onkeydown="handleChatKeydown(event)"></textarea>
+      <button class="chat-send" id="chatSendBtn" onclick="sendChatMessage()">➤</button>
+    </div>
+  </div>
+</section>
+
 <!-- Wisdom -->
 <div class="wisdom-section">
   <div class="wisdom-quote fade-in" id="wisdomCard">
@@ -1514,7 +1854,7 @@
     <a href="#adhkar">Adhkar</a>
     <a href="#quran">Quran</a>
     <a href="#stats">Stats</a>
-
+    <a href="#scholars">Ask Scholars</a>
   </div>
   <p>Taqwa — Salah &amp; Worship Tracker</p>
   <p style="margin-top:4px;">Based on the Quran &amp; Sunnah upon the Manhaj of the Salaf</p>
@@ -2583,6 +2923,212 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 });
+
+// ======================================================================
+// ASK SCHOLARS — Chat Q&A Interface
+// ======================================================================
+//
+// API CONFIGURATION:
+// Supports OpenAI-compatible APIs (Gemini, OpenAI, Groq, etc.)
+// Replace the API_KEY below with your own key.
+// Replace API_URL to point at your chosen provider's endpoint.
+//
+// Supported providers:
+//   - OpenAI:     https://api.openai.com/v1/chat/completions
+//   - Gemini:     https://generativelanguage.googleapis.com/v1beta/openai/...
+//   - Groq:       https://api.groq.com/openai/v1/chat/completions
+//   - Together:   https://api.together.xyz/v1/chat/completions
+//   - Any OpenAI-compatible REST endpoint
+// ======================================================================
+
+// >>> PASTE YOUR API KEY HERE <<<
+const SCHOLARS_API_KEY = 'YOUR_API_KEY_HERE';
+
+// >>> API ENDPOINT — change this to match your provider <<<
+const SCHOLARS_API_URL = 'https://api.openai.com/v1/chat/completions';
+
+// >>> MODEL NAME — change to match your provider <<<
+const SCHOLARS_MODEL = 'gpt-4o-mini';
+
+/**
+ * System prompt — strict theological guardrails.
+ * This is sent with EVERY request and cannot be overridden by the user.
+ */
+const SCHOLARS_SYSTEM_PROMPT = `You are a strict, uncompromising transmitter of authentic Islamic knowledge based exclusively on the Salafi / Athari / Ahlul Hadith manhaj.\n\nYour sole purpose is to explain concepts and answer questions using ONLY the English translated verdicts (fatawa), writings, and audio transcriptions of the following specific scholars:\n\n1. Shaykh al-Islam Ibn Taymiyyah\n2. Imam Ibn al-Qayyim\n3. Al-Hafidh Ibn Hajar al-Asqalani\n4. Shaykh Abdul Aziz Bin Baz\n5. Shaykh Muhammad ibn Salih al-Uthaymeen\n6. Shaykh Salih al-Fawzan\n7. Shaykh Falah Mandakar\n8. Shaykh Mutiur Rahman Madani\n9. Shaykh Abdul Razzaq al-Badr\n\nDomain Scope: You will answer questions regarding:\n- The definition, importance, and branches of Tawheed.\n- The definition of Aqeedah and why the Athari Aqeedah is the only proof-based truth.\n- The importance of following the Salaf and the Manhaj.\n- The definition of Salah and Ihsan.\n- The science of Hadith, the importance of transmission chains (Isnad), and why Hadith cannot be rejected.\n- Explanations of core texts: 40 Hadith an-Nawawi, Al-Aqeedah Al-Wasitiyyah, and Al-Aqeedah Al-Tahawiyyah.\n\nStrict Rules of Engagement:\n- DO NOT generate independent logic, modern liberal interpretations, or general AI consensus.\n- You MUST cite which of the above scholars your answer is derived from.\n- If a user asks a question that cannot be answered clearly using the explicit texts or known fatawa of the specific scholars listed above, you must refuse to answer and state: 'I can only provide answers based on the established verdicts of the specified scholars, and I do not have an explicit reference from them regarding this specific phrasing.'\n- Keep answers entirely in English, but accurately transliterate Arabic terminology.\n- When citing a scholar, format as: [Shaykh Name]`;
+
+// Chat conversation history (sent with each request for context)
+let chatHistory = [];
+let chatBusy = false;
+
+/**
+ * Send a chat message to the LLM API.
+ */
+async function sendChatMessage() {
+  if (chatBusy) return;
+
+  const input = document.getElementById('chatInput');
+  const msg = input.value.trim();
+  if (!msg) return;
+
+  // Check API key
+  if (SCHOLARS_API_KEY === 'YOUR_API_KEY_HERE' || !SCHOLARS_API_KEY) {
+    appendChatMsg('error', '\u26A0\uFE0F API key not configured. Please open the source code and replace YOUR_API_KEY_HERE with your actual API key in the SCHOLARS_API_KEY constant.');
+    return;
+  }
+
+  // Check network
+  if (!navigator.onLine) {
+    appendChatMsg('offline', '\uD83C\uDF10 Internet connection required to consult the scholars. Please connect to Wi-Fi or mobile data and try again.');
+    return;
+  }
+
+  // Hide welcome screen
+  const welcome = document.getElementById('chatWelcome');
+  if (welcome) welcome.style.display = 'none';
+
+  // Hide suggestion chips after first message
+  const chips = document.getElementById('chatSuggestions');
+  if (chips && chatHistory.length === 0) chips.style.display = 'none';
+
+  // Show user message
+  appendChatMsg('user', msg);
+  input.value = '';
+  autoResize(input);
+
+  // Show typing indicator
+  chatBusy = true;
+  const sendBtn = document.getElementById('chatSendBtn');
+  sendBtn.disabled = true;
+  const typingEl = showTyping();
+
+  try {
+    // Add user message to history
+    chatHistory.push({ role: 'user', content: msg });
+
+    const response = await fetch(SCHOLARS_API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${SCHOLARS_API_KEY}`
+      },
+      body: JSON.stringify({
+        model: SCHOLARS_MODEL,
+        messages: [
+          { role: 'system', content: SCHOLARS_SYSTEM_PROMPT },
+          ...chatHistory.slice(-10) // Last 10 messages for context window
+        ],
+        temperature: 0.3,
+        max_tokens: 1500,
+        top_p: 0.9
+      })
+    });
+
+    removeTyping(typingEl);
+
+    if (!response.ok) {
+      const errBody = await response.text().catch(() => '');
+      console.error('Taqwa: Scholar API error:', response.status, errBody);
+      if (response.status === 401) {
+        appendChatMsg('error', '\u26A0\uFE0F Invalid API key. Please check your SCHOLARS_API_KEY in the source code.');
+      } else if (response.status === 429) {
+        appendChatMsg('error', '\u23F3 Rate limit exceeded. Please wait a moment and try again.');
+      } else {
+        appendChatMsg('error', `\u26A0\uFE0F API error (${response.status}). Please try again later.`);
+      }
+      chatHistory.pop(); // Remove the user message from history on error
+      return;
+    }
+
+    const data = await response.json();
+    const reply = data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content;
+
+    if (!reply) {
+      appendChatMsg('error', '\u26A0\uFE0F Received an empty response from the API. Please try again.');
+      chatHistory.pop();
+      return;
+    }
+
+    // Show scholar response
+    appendChatMsg('scholar', reply);
+    chatHistory.push({ role: 'assistant', content: reply });
+
+  } catch (err) {
+    removeTyping(typingEl);
+    console.error('Taqwa: Chat request failed:', err);
+    appendChatMsg('offline', '\uD83C\uDF10 Network error. Internet connection required to consult the scholars. Please check your connection and try again.');
+    chatHistory.pop(); // Remove the user message from history on error
+  } finally {
+    chatBusy = false;
+    sendBtn.disabled = false;
+  }
+}
+
+/**
+ * Append a message to the chat window.
+ */
+function appendChatMsg(type, text) {
+  const container = document.getElementById('chatMessages');
+  const div = document.createElement('div');
+  div.className = `chat-msg ${type}`;
+  // Convert markdown-style bold (**text**) to <strong>
+  let html = text
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\n/g, '<br>');
+  div.innerHTML = html;
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+}
+
+/**
+ * Show typing indicator, return element reference.
+ */
+function showTyping() {
+  const container = document.getElementById('chatMessages');
+  const div = document.createElement('div');
+  div.className = 'chat-typing';
+  div.innerHTML = '<div class="chat-typing-dot"></div><div class="chat-typing-dot"></div><div class="chat-typing-dot"></div>';
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+  return div;
+}
+
+/**
+ * Remove typing indicator.
+ */
+function removeTyping(el) {
+  if (el && el.parentNode) el.parentNode.removeChild(el);
+}
+
+/**
+ * Handle Enter key in chat input (Shift+Enter for newline).
+ */
+function handleChatKeydown(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendChatMessage();
+  }
+}
+
+/**
+ * Auto-resize textarea as user types.
+ */
+document.addEventListener('input', (e) => {
+  if (e.target && e.target.id === 'chatInput') autoResize(e.target);
+});
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+}
+
+/**
+ * Send a suggestion chip message.
+ */
+function sendSuggestion(text) {
+  const input = document.getElementById('chatInput');
+  input.value = text;
+  sendChatMessage();
+}
 </script>
 
 </body>
