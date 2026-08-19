@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Taqwa</string>
+    <string name="title_activity_main">Taqwa</string>
+    <string name="package_name">com.taqwa.prayer</string>
+    <string name="custom_url_scheme">com.taqwa.prayer</string>
+</resources>

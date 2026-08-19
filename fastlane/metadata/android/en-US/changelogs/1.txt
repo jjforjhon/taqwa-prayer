@@ -1,0 +1,12 @@
+Version 1.0.0 — Initial Release
+
+• Prayer Tracker with all 5 daily prayers + Jama'ah support
+• Sunnah Mu'akkadah tracker (12 Rakat per Hadith of Umm Habibah, Sahih Muslim 727)
+• General Daily Actions (Nafl) including Tahiyatul Masjid and Ishraq
+• Adhkar tracker with Morning, Evening, Sleep, and Masnoon Du'as
+• Quran reading tracker with Juz grid and Khatmah progress
+• Stats dashboard with streak, weekly chart, and perfect days
+• Offline prayer time calculation using Umm al-Qura method
+• Local prayer time notifications (no internet required)
+• Based on Quran & Sunnah upon the Manhaj of the Salaf
+• Zero proprietary dependencies — fully FOSS compliant

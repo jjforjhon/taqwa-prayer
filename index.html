@@ -1536,6 +1536,10 @@
   </div>
 </div>
 
+<!-- Offline prayer calculation library (adhan-js, bundled) -->
+<script src="adhan.min.js"></script>
+
+<!-- Capacitor native plugins (available when running in Android app) -->
 <script>
 // ======================================================================
 // TAQWA — Salah & Worship Tracker
@@ -1570,13 +1574,76 @@
 // ===== DATA & STATE =====
 const APP_KEY = 'taqwa_data';
 
-const PRAYERS = [
-  { id: 'fajr', name: 'Fajr', arabic: 'الفجر', icon: '🌅', time: '05:15' },
-  { id: 'dhuhr', name: 'Dhuhr', arabic: 'الظهر', icon: '☀️', time: '12:30' },
-  { id: 'asr', name: 'Asr', arabic: 'العصر', icon: '🌤', time: '16:00' },
-  { id: 'maghrib', name: 'Maghrib', arabic: 'المغرب', icon: '🌅', time: '19:15' },
-  { id: 'isha', name: 'Isha', arabic: 'العشاء', icon: '🌙', time: '20:45' }
-];
+// ======================================================================
+// PRAYER TIMES — Calculated locally using adhan-js (Umm al-Qura method)
+// Default coordinates: Makkah (21.4225, 39.8262) — overridden by GPS
+// ======================================================================
+let PRAYER_COORDS;
+try {
+  PRAYER_COORDS = new adhan.Coordinates(21.4225, 39.8262);
+} catch (e) {
+  console.error('Taqwa: adhan-js library failed to load:', e);
+  // Fallback: create a minimal coordinates object
+  PRAYER_COORDS = { latitude: 21.4225, longitude: 39.8262 };
+}
+
+function getPrayerParams() {
+  const params = adhan.CalculationMethod.UmmAlQura();
+  params.madhab = adhan.Madhab.Shafi; // Standard (NOT Hanafi) — shadow = 1x object
+  return params;
+}
+
+function calculatePrayerTimes(date, coords) {
+  try {
+    const d = date || new Date();
+    const c = coords || PRAYER_COORDS;
+    const params = getPrayerParams();
+    const times = new adhan.PrayerTimes(c, d, params);
+
+    function fmt(date) {
+      if (!date) return '--:--';
+      const h = date.getHours();
+      const m = date.getMinutes();
+      return `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}`;
+    }
+
+    return [
+      { id: 'fajr', name: 'Fajr', arabic: '\u0627\u0644\u0641\u062C\u0631', icon: '\uD83C\uDF05', time: fmt(times.fajr) },
+      { id: 'sunrise', name: 'Sunrise', arabic: '\u0627\u0644\u0634\u0631\u0648\u0642', icon: '\u2600\uFE0F', time: fmt(times.sunrise) },
+      { id: 'dhuhr', name: 'Dhuhr', arabic: '\u0627\u0644\u0638\u0647\u0631', icon: '\u2600\uFE0F', time: fmt(times.dhuhr) },
+      { id: 'asr', name: 'Asr', arabic: '\u0627\u0644\u0639\u0635\u0631', icon: '\uD83C\uDF24', time: fmt(times.asr) },
+      { id: 'maghrib', name: 'Maghrib', arabic: '\u0627\u0644\u0645\u063A\u0631\u0628', icon: '\uD83C\uDF05', time: fmt(times.maghrib) },
+      { id: 'isha', name: 'Isha', arabic: '\u0627\u0644\u0639\u0634\u0627\u0621', icon: '\uD83C\uDF19', time: fmt(times.isha) }
+    ];
+  } catch (e) {
+    console.error('Taqwa: calculatePrayerTimes error:', e);
+    // Return static fallback times so the app never shows blank
+    return [
+      { id: 'fajr', name: 'Fajr', arabic: '\u0627\u0644\u0641\u062C\u0631', icon: '\uD83C\uDF05', time: '05:00' },
+      { id: 'sunrise', name: 'Sunrise', arabic: '\u0627\u0644\u0634\u0631\u0648\u0642', icon: '\u2600\uFE0F', time: '06:15' },
+      { id: 'dhuhr', name: 'Dhuhr', arabic: '\u0627\u0644\u0638\u0647\u0631', icon: '\u2600\uFE0F', time: '12:15' },
+      { id: 'asr', name: 'Asr', arabic: '\u0627\u0644\u0639\u0635\u0631', icon: '\uD83C\uDF24', time: '15:30' },
+      { id: 'maghrib', name: 'Maghrib', arabic: '\u0627\u0644\u0645\u063A\u0631\u0628', icon: '\uD83C\uDF05', time: '18:30' },
+      { id: 'isha', name: 'Isha', arabic: '\u0627\u0644\u0639\u0634\u0627\u0621', icon: '\uD83C\uDF19', time: '20:00' }
+    ];
+  }
+}
+
+let PRAYERS;
+try {
+  PRAYERS = calculatePrayerTimes();
+} catch (e) {
+  console.error('Taqwa: Initial prayer time calculation failed:', e);
+  // Fallback static times for Makkah
+  PRAYERS = [
+    { id: 'fajr', name: 'Fajr', arabic: '\u0627\u0644\u0641\u062C\u0631', icon: '\uD83C\uDF05', time: '05:00' },
+    { id: 'sunrise', name: 'Sunrise', arabic: '\u0627\u0644\u0634\u0631\u0648\u0642', icon: '\u2600\uFE0F', time: '06:15' },
+    { id: 'dhuhr', name: 'Dhuhr', arabic: '\u0627\u0644\u0638\u0647\u0631', icon: '\u2600\uFE0F', time: '12:15' },
+    { id: 'asr', name: 'Asr', arabic: '\u0627\u0644\u0639\u0635\u0631', icon: '\uD83C\uDF24', time: '15:30' },
+    { id: 'maghrib', name: 'Maghrib', arabic: '\u0627\u0644\u0645\u063A\u0631\u0628', icon: '\uD83C\uDF05', time: '18:30' },
+    { id: 'isha', name: 'Isha', arabic: '\u0627\u0644\u0639\u0634\u0627\u0621', icon: '\uD83C\uDF19', time: '20:00' }
+  ];
+}
 
 // ======================================================================
 // SUNNAH MU'AKKADAH — The 12 Established Sunnah Rawatib Prayers
@@ -1854,7 +1921,7 @@ function incrementNafl(id, target) {
     }
   }
 }
-
+
 
 
 function updateNextPrayer() {
@@ -2221,18 +2288,131 @@ function isAuthenticSource(source) {
 // ======================================================================
 // GEOLOCATION (for prayer location display)
 // ======================================================================
-function initLocation() {
-  if ('geolocation' in navigator) {
-    navigator.geolocation.getCurrentPosition(
-      pos => {
-        const lat = pos.coords.latitude;
-        const lng = pos.coords.longitude;
-        document.getElementById('locationText').textContent = `${lat.toFixed(2)}°, ${lng.toFixed(2)}°`;
-      },
-      () => {
-        document.getElementById('locationText').textContent = 'Location access denied. Using default.';
+// ======================================================================
+// GEOLOCATION — Recalculates prayer times when GPS coordinates are obtained
+// Uses Capacitor Geolocation plugin on Android, browser API as fallback
+// ======================================================================
+// Default fallback coordinates: Makkah (21.4225°N, 39.8262°E)
+const MAKKAH_LAT = 21.4225;
+const MAKKAH_LNG = 39.8262;
+
+/**
+ * initLocation — Non-blocking, async geolocation fetch.
+ * Wrapped entirely in try/catch so it NEVER crashes the app.
+ * Falls back silently to Makkah coordinates on any error.
+ */
+async function initLocation() {
+  try {
+    let position = null;
+
+    if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.Geolocation) {
+      // --- Android / Capacitor path ---
+      // 1) Request permission first (non-blocking)
+      try {
+        const perm = await window.Capacitor.Plugins.Geolocation.requestPermissions();
+        if (perm && (perm.location === 'denied' || perm.coarseLocation === 'denied')) {
+          console.warn('Taqwa: Location permission denied by user. Falling back to Makkah.');
+          useDefaultLocation();
+          return;
+        }
+      } catch (permErr) {
+        console.error('Taqwa: Error requesting location permissions:', permErr);
+        useDefaultLocation();
+        return;
       }
-    );
+
+      // 2) Fetch position
+      position = await window.Capacitor.Plugins.Geolocation.getCurrentPosition({
+        enableHighAccuracy: true,
+        timeout: 15000
+      });
+
+    } else if ('geolocation' in navigator) {
+      // --- Browser fallback ---
+      position = await new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject, {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 300000
+        });
+      });
+
+    } else {
+      console.warn('Taqwa: Geolocation API not available. Falling back to Makkah.');
+      useDefaultLocation();
+      return;
+    }
+
+    // Success — update UI and recalculate prayer times
+    if (position && position.coords) {
+      const lat = position.coords.latitude;
+      const lng = position.coords.longitude;
+      document.getElementById('locationText').textContent = `${lat.toFixed(2)}\u00B0, ${lng.toFixed(2)}\u00B0`;
+      PRAYER_COORDS = new adhan.Coordinates(lat, lng);
+      PRAYERS = calculatePrayerTimes();
+      renderPrayers();
+      updateNextPrayer();
+      schedulePrayerNotifications();
+    } else {
+      useDefaultLocation();
+    }
+
+  } catch (err) {
+    // ANY error — GPS off, timeout, plugin crash, etc. → fall back silently
+    console.error('Taqwa: Location fetch failed, using default Makkah coordinates:', err);
+    useDefaultLocation();
+  }
+}
+
+/**
+ * Sets the location text to the Makkah default and ensures
+ * prayer times are calculated for Makkah if not already set.
+ */
+function useDefaultLocation() {
+  document.getElementById('locationText').textContent = 'Default: Makkah (21.42\u00B0N, 39.83\u00B0E)';
+  PRAYER_COORDS = new adhan.Coordinates(MAKKAH_LAT, MAKKAH_LNG);
+  PRAYERS = calculatePrayerTimes();
+  renderPrayers();
+  updateNextPrayer();
+}
+
+// ======================================================================
+// LOCAL NOTIFICATIONS — Prayer time reminders via Capacitor plugin
+// Schedules notifications for each of the 5 daily prayers.
+// Uses Capacitor Local Notifications on Android, no-op on web.
+// ======================================================================
+async function schedulePrayerNotifications() {
+  if (!window.Capacitor || !window.Capacitor.Plugins || !window.Capacitor.Plugins.LocalNotifications) {
+    return; // Not running in Android app or plugin not available
+  }
+
+  const notifications = PRAYERS.filter(p => p.id !== 'sunrise').map((prayer, index) => {
+    const [h, m] = prayer.time.split(':').map(Number);
+    const notifDate = new Date();
+    notifDate.setHours(h, m, 0, 0);
+    // If the time has already passed today, schedule for tomorrow
+    if (notifDate <= new Date()) {
+      notifDate.setDate(notifDate.getDate() + 1);
+    }
+
+    return {
+      id: index + 1,
+      title: `${prayer.name} Prayer`,
+      body: `It's time for ${prayer.name} prayer (${prayer.time}). May Allah ﷻ accept your Salah.`,
+      schedule: { at: notifDate },
+      smallIcon: 'ic_stat_icon_config_sample',
+      largeIcon: 'ic_launcher',
+      channelId: 'prayer-reminders',
+    };
+  });
+
+  try {
+    // Cancel existing scheduled notifications first
+    await window.Capacitor.Plugins.LocalNotifications.cancel({ notifications: notifications.map(n => ({ id: n.id })) });
+    // Schedule new ones
+    await window.Capacitor.Plugins.LocalNotifications.schedule({ notifications });
+  } catch (e) {
+    console.error('Taqwa: Notification scheduling failed:', e);
   }
 }
 
@@ -2321,28 +2501,80 @@ function checkDailyReset() {
   }
   state.lastPrayerDate = today;
   saveState();
-}
-
-// ===== INIT =====
+}// ===== INIT =====
+// CRITICAL: UI rendering is fully decoupled from location.
+// All tabs, Adhkar, Quran, Stats render IMMEDIATELY.
+// Geolocation runs async AFTER the UI is painted.
 function renderAll() {
   todayState();
-  renderPrayers();
-  renderDhikrCategories();
-  renderCurrentDhikr();
-  renderQuran();
-  renderWisdom();
-  updateNextPrayer();
-  renderNafl();
-  initLocation();
-  checkDailyReset();
-  updateStats();
+
+  // --- Phase 1: Render ALL UI immediately (no async dependencies) ---
+  try {
+    renderPrayers();
+  } catch (e) { console.error('Taqwa: renderPrayers failed:', e); }
+
+  try {
+    renderDhikrCategories();
+  } catch (e) { console.error('Taqwa: renderDhikrCategories failed:', e); }
+
+  try {
+    renderCurrentDhikr();
+  } catch (e) { console.error('Taqwa: renderCurrentDhikr failed:', e); }
+
+  try {
+    renderQuran();
+  } catch (e) { console.error('Taqwa: renderQuran failed:', e); }
+
+  try {
+    renderWisdom();
+  } catch (e) { console.error('Taqwa: renderWisdom failed:', e); }
+
+  try {
+    updateNextPrayer();
+  } catch (e) { console.error('Taqwa: updateNextPrayer failed:', e); }
+
+  try {
+    renderNafl();
+  } catch (e) { console.error('Taqwa: renderNafl failed:', e); }
+
+  try {
+    checkDailyReset();
+  } catch (e) { console.error('Taqwa: checkDailyReset failed:', e); }
+
+  try {
+    updateStats();
+  } catch (e) { console.error('Taqwa: updateStats failed:', e); }
+
+  // --- Phase 2: Fetch location asynchronously (non-blocking) ---
+  // This NEVER blocks or crashes the UI above.
+  initLocation().catch(err => {
+    console.error('Taqwa: initLocation unhandled error:', err);
+    useDefaultLocation();
+  });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  renderAll();
-  initScrollAnimations();
-  initActiveNav();
-  setInterval(updateNextPrayer, 60000);
+  // CRITICAL: Wrap everything in try/catch so a single failure
+  // does NOT prevent other features from initializing.
+  try {
+    renderAll();
+  } catch (e) {
+    console.error('Taqwa: renderAll failed:', e);
+    // Even if renderAll somehow fails, still attach navigation
+  }
+
+  try {
+    initScrollAnimations();
+  } catch (e) { console.error('Taqwa: initScrollAnimations failed:', e); }
+
+  try {
+    initActiveNav();
+  } catch (e) { console.error('Taqwa: initActiveNav failed:', e); }
+
+  // Update next prayer countdown every 60 seconds
+  setInterval(() => {
+    try { updateNextPrayer(); } catch (e) { console.error('Taqwa: updateNextPrayer interval failed:', e); }
+  }, 60000);
 
   // Close mobile nav on link click
   document.querySelectorAll('.nav-links a').forEach(link => {

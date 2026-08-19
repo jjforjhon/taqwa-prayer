@@ -1,0 +1,25 @@
+{
+  "appId": "com.taqwa.prayer",
+  "appName": "Taqwa",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https"
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 2000,
+      "backgroundColor": "#000000",
+      "showSpinner": true,
+      "spinnerColor": "#0a84ff"
+    },
+    "StatusBar": {
+      "style": "DARK",
+      "backgroundColor": "#000000"
+    },
+    "LocalNotifications": {
+      "smallIcon": "ic_stat_icon_config_sample",
+      "iconColor": "#0a84ff"
+    }
+  },
+  "android": {}
+}

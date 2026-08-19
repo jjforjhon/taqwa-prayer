@@ -1,0 +1,37 @@
+{
+  "name": "taqwa-prayer",
+  "version": "1.0.0",
+  "description": "Taqwa — Salah & Worship Tracker. Offline Android app based on the Quran & Sunnah upon the Manhaj of the Salaf.",
+  "main": "index.js",
+  "scripts": {
+    "build:web": "echo 'Static site — no build step required'",
+    "sync": "npx cap sync android",
+    "open:android": "npx cap open android",
+    "build:apk": "cd android && ./gradlew assembleDebug",
+    "build:apk:release": "cd android && ./gradlew assembleRelease"
+  },
+  "keywords": [
+    "islam",
+    "salah",
+    "prayer-tracker",
+    "salafi",
+    "adhkar",
+    "quran",
+    "offline",
+    "android"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@capacitor/cli": "^6.0.0",
+    "@capacitor/core": "^6.0.0",
+    "@capacitor/geolocation": "^6.0.0",
+    "@capacitor/local-notifications": "^6.0.0",
+    "@capacitor/splash-screen": "^6.0.0",
+    "@capacitor/status-bar": "^6.0.0",
+    "adhan": "^4.4.3"
+  },
+  "devDependencies": {
+    "@capacitor/android": "^6.2.1"
+  }
+}

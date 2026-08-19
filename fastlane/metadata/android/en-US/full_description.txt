@@ -1,0 +1,28 @@
+Taqwa — Salah & Worship Tracker
+
+A beautiful, fully offline Android app for Muslims to track their salah (prayer) and worship based on Salafi Islam (Ahlul Hadith manhaj).
+
+Features:
+• Prayer Tracker — Track all 5 daily prayers with Jama'ah support
+• Sunnah Mu'akkadah — 12 established Rakat per the Hadith of Umm Habibah (Sahih Muslim 727)
+• General Daily Actions — Tahiyatul Masjid, Ishraq, and voluntary prayers
+• Adhkar — Morning, Evening, Sleep, and Masnoon Du'as with authentic hadith sources
+• Quran Tracker — Log reading sessions, track Juz progress and Khatmah count
+• Stats Dashboard — Streak, weekly chart, perfect days, and more
+• Offline Prayer Times — Calculated locally using Umm al-Qura method (no internet required)
+• Prayer Notifications — Local reminders for each of the 5 daily prayers
+
+Based on:
+• The Quran and Sunnah upon the Manhaj of the Salaf
+• Umm al-Qura University prayer time calculation (Saudi Arabia)
+• Standard Asr method (Shafi'i/Maliki/Hanbali/Ahlul Hadith)
+• All adhkar sourced from Sahih al-Bukhari, Sahih Muslim, and other canonical collections
+• Permanent Committee for Scholarly Research and Ifta (Saudi Arabia)
+
+Privacy:
+• 100% offline — no data leaves your device
+• No accounts, no servers, no tracking
+• All data stored locally via Android internal storage
+
+Zero proprietary Google Play Services dependencies.
+Built with Capacitor (open-source).
