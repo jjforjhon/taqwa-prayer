@@ -2942,13 +2942,14 @@ document.addEventListener('DOMContentLoaded', () => {
 // ======================================================================
 
 // >>> PASTE YOUR API KEY HERE <<<
+// 1. Get your free key from console.groq.com
 const SCHOLARS_API_KEY = 'YOUR_API_KEY_HERE';
 
-// >>> API ENDPOINT — change this to match your provider <<<
-const SCHOLARS_API_URL = 'https://api.openai.com/v1/chat/completions';
+// 2. The Groq endpoint (it perfectly mimics OpenAI's structure)
+const SCHOLARS_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 
-// >>> MODEL NAME — change to match your provider <<<
-const SCHOLARS_MODEL = 'gpt-4o-mini';
+// 3. The Llama 3.3 70B model
+const SCHOLARS_MODEL = 'openai/gpt-oss-20b';
 
 /**
  * System prompt — strict theological guardrails.
@@ -3027,8 +3028,10 @@ async function sendChatMessage() {
 
     if (!response.ok) {
       const errBody = await response.text().catch(() => '');
-      console.error('Taqwa: Scholar API error:', response.status, errBody);
-      if (response.status === 401) {
+      console.error(`Taqwa: Scholar API error — HTTP ${response.status} | Model: ${SCHOLARS_MODEL} | Response:`, errBody);
+      if (response.status === 404) {
+        appendChatMsg('error', '\u26A0\uFE0F API Error (404): The selected AI model is deprecated or unavailable. Please update the SCHOLARS_MODEL in the source code.');
+      } else if (response.status === 401) {
         appendChatMsg('error', '\u26A0\uFE0F Invalid API key. Please check your SCHOLARS_API_KEY in the source code.');
       } else if (response.status === 429) {
         appendChatMsg('error', '\u23F3 Rate limit exceeded. Please wait a moment and try again.');
