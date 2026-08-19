@@ -937,87 +937,6 @@
   .streak-number { font-size: 72px; font-weight: 800; letter-spacing: -0.04em; position: relative; color: var(--gold); }
   .streak-label { font-size: 16px; color: var(--text-secondary); position: relative; margin-top: 8px; }
 
-  /* ===== QIBLA ===== */
-  #qibla {
-    text-align: center;
-  }
-
-  .compass-container {
-    width: 280px;
-    height: 280px;
-    margin: 0 auto 40px;
-    position: relative;
-  }
-
-  .compass-ring {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    border: 2px solid var(--surface-3);
-    position: relative;
-    transition: transform 0.3s ease;
-  }
-
-  .compass-ring .cardinal {
-    position: absolute;
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--text-secondary);
-  }
-
-  .compass-ring .cardinal.n { top: -24px; left: 50%; transform: translateX(-50%); }
-  .compass-ring .cardinal.s { bottom: -24px; left: 50%; transform: translateX(-50%); }
-  .compass-ring .cardinal.e { right: -24px; top: 50%; transform: translateY(-50%); }
-  .compass-ring .cardinal.w { left: -24px; top: 50%; transform: translateY(-50%); }
-
-  .qibla-arrow {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 4px;
-    height: 50%;
-    background: var(--gradient-1);
-    border-radius: 4px;
-    transform-origin: bottom center;
-    transform: translate(-50%, -100%);
-    transition: transform 0.3s ease;
-  }
-
-  .qibla-arrow::after {
-    content: '';
-    position: absolute;
-    top: -8px;
-    left: 50%;
-    transform: translateX(-50%);
-    border-left: 10px solid transparent;
-    border-right: 10px solid transparent;
-    border-bottom: 16px solid var(--accent);
-  }
-
-  .compass-center {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 12px;
-    height: 12px;
-    background: var(--accent);
-    border-radius: 50%;
-    z-index: 2;
-  }
-
-  .qibla-info {
-    font-size: 18px;
-    color: var(--text-secondary);
-    margin-bottom: 8px;
-  }
-
-  .qibla-degree {
-    font-size: 48px;
-    font-weight: 700;
-    letter-spacing: -0.03em;
-  }
-
   /* ===== WISDOM CARDS ===== */
   .wisdom-section {
     padding: 80px 24px;
@@ -1294,7 +1213,7 @@
       <li><a href="#adhkar">Adhkar</a></li>
       <li><a href="#quran">Quran</a></li>
       <li><a href="#stats">Stats</a></li>
-      <li><a href="#qibla">Qibla</a></li>
+
     </ul>
     <div class="nav-right">
       <button class="hamburger" id="hamburger" onclick="toggleMobileNav()">☰</button>
@@ -1309,7 +1228,7 @@
   <p>Track your daily prayers, adhkar, and Quran recitation. Strengthen your relationship with Allah ﷻ through consistency.</p>
   <div class="hero-actions">
     <button class="btn-primary" onclick="scrollToSelector('#prayer-times')">Start Tracking</button>
-    <button class="btn-secondary" onclick="scrollToSelector('#qibla')">Find Qibla</button>
+
   </div>
 </section>
 
@@ -1499,29 +1418,7 @@
   </div>
 </section>
 
-<!-- Qibla -->
-<section id="qibla">
-  <div class="fade-in">
-    <div class="section-label">Direction</div>
-    <h2 class="section-title">Qibla Compass</h2>
-    <p class="section-desc" style="margin-left:auto;margin-right:auto;text-align:center;">Find the direction of the Ka'bah in Makkah from your location.</p>
-  </div>
 
-  <div class="compass-container fade-in">
-    <div class="compass-ring" id="compassRing">
-      <span class="cardinal n">N</span>
-      <span class="cardinal s">S</span>
-      <span class="cardinal e">E</span>
-      <span class="cardinal w">W</span>
-      <div class="qibla-arrow" id="qiblaArrow"></div>
-      <div class="compass-center"></div>
-    </div>
-  </div>
-
-  <div class="qibla-info fade-in">Qibla Direction</div>
-  <div class="qibla-degree fade-in" id="qiblaDegree">--°</div>
-  <p class="qibla-info fade-in" id="qiblaDistance" style="margin-top:16px;font-size:14px;"></p>
-</section>
 
 <!-- Wisdom -->
 <div class="wisdom-section">
@@ -1540,7 +1437,7 @@
     <a href="#adhkar">Adhkar</a>
     <a href="#quran">Quran</a>
     <a href="#stats">Stats</a>
-    <a href="#qibla">Qibla</a>
+
   </div>
   <p>Taqwa — Salah &amp; Worship Tracker</p>
   <p style="margin-top:4px;">Based on the Quran &amp; Sunnah upon the Manhaj of the Salaf</p>
@@ -2097,46 +1994,20 @@ function renderWisdom() {
   document.getElementById('wisdomSource').textContent = w.source;
 }
 
-// ===== QIBLA =====
-function initQibla() {
+// ===== GEOLOCATION (for prayer location display) =====
+function initLocation() {
   if ('geolocation' in navigator) {
     navigator.geolocation.getCurrentPosition(
       pos => {
         const lat = pos.coords.latitude;
         const lng = pos.coords.longitude;
-        const qibla = calculateQibla(lat, lng);
-        document.getElementById('qiblaArrow').style.transform = `translate(-50%, -100%) rotate(${qibla}deg)`;
-        document.getElementById('qiblaDegree').textContent = Math.round(qibla) + '°';
         document.getElementById('locationText').textContent = `${lat.toFixed(2)}°, ${lng.toFixed(2)}°`;
-        document.getElementById('qiblaDistance').textContent = `Distance to Ka'bah: ~${Math.round(haversine(lat, lng, 21.4225, 39.8262))} km`;
       },
       () => {
         document.getElementById('locationText').textContent = 'Location access denied. Using default.';
-        document.getElementById('qiblaDegree').textContent = '~117°';
       }
     );
   }
-}
-
-function calculateQibla(lat, lng) {
-  const kaLat = 21.4225 * Math.PI / 180;
-  const kaLng = 39.8262 * Math.PI / 180;
-  const latR = lat * Math.PI / 180;
-  const lngR = lng * Math.PI / 180;
-  const dLng = kaLng - lngR;
-  const y = Math.sin(dLng);
-  const x = Math.cos(latR) * Math.tan(kaLat) - Math.sin(latR) * Math.cos(dLng);
-  let bearing = Math.atan2(y, x) * 180 / Math.PI;
-  if (bearing < 0) bearing += 360;
-  return bearing;
-}
-
-function haversine(lat1, lon1, lat2, lon2) {
-  const R = 6371;
-  const dLat = (lat2 - lat1) * Math.PI / 180;
-  const dLon = (lon2 - lon1) * Math.PI / 180;
-  const a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon/2) * Math.sin(dLon/2);
-  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 }
 
 // ===== UTILITIES =====
@@ -2235,7 +2106,7 @@ function renderAll() {
   renderQuran();
   renderWisdom();
   updateNextPrayer();
-  initQibla();
+  initLocation();
   checkDailyReset();
   updateStats();
 }

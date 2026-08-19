@@ -8,7 +8,6 @@ A beautiful Apple-style website for Muslims to track their **salah (prayer)** an
 - **📿 Adhkar** — Morning, Evening, Sleep, and Masnoon Du'as with authentic hadith sources
 - **📖 Quran Tracker** — Log reading sessions, track Juz progress and Khatmah count
 - **📊 Stats Dashboard** — Streak, weekly chart, perfect days, and more
-- **🧭 Qibla Compass** — Geolocation-based Qibla direction with distance to Ka'bah
 - **💡 Daily Wisdom** — Quranic verses and prophetic guidance
 
 ## Based On
